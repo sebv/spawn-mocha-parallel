@@ -1,0 +1,40 @@
+{
+  "name": "spawn-mocha-parallel",
+  "version": "0.0.1",
+  "description": "Spawn mocha child processes in parallel.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sebv/spawn-mocha-parallel.git"
+  },
+  "keywords": [
+    "mocha",
+    "spawn",
+    "process",
+    "parallel",
+    "gulp"
+  ],
+  "author": {
+    "name": "seb vincent",
+    "email": "sebv@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebv/spawn-mocha-parallel/issues"
+  },
+  "homepage": "https://github.com/sebv/spawn-mocha-parallel",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "mocha": "~1",
+    "async": "~0.9.0"
+  },
+  "devDependencies": {
+    "stream-buffers": "^0.2.5"
+  },
+  "engines": {
+    "node": ">= 0.9.0"
+  }
+}
