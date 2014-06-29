@@ -27,12 +27,12 @@
   },
   "homepage": "https://github.com/sebv/spawn-mocha-parallel",
   "dependencies": {
+    "async": "~0.9.0",
     "lodash": "~2.4.1",
     "mocha": "~1",
-    "async": "~0.9.0"
+    "stream-buffers": "~0.2.5"
   },
   "devDependencies": {
-    "stream-buffers": "^0.2.5"
   },
   "engines": {
     "node": ">= 0.9.0"
