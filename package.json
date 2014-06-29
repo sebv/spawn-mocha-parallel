@@ -1,6 +1,6 @@
 {
   "name": "spawn-mocha-parallel",
-  "version": "0.0.1",
+  "version": "0.0.1-beta1",
   "description": "Spawn mocha child processes in parallel.",
   "main": "lib/index.js",
   "scripts": {
