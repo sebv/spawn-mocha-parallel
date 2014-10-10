@@ -36,7 +36,7 @@ var SpawnMocha = require('./lib').SpawnMocha,
     through = require('through');
 
 // customize output as you need
-function mocha(opts) {
+function mochaStream(opts) {
   opts = opts || {};
   var spawnMocha = new SpawnMocha(opts);
   var stream = through(function write(file) {
@@ -60,7 +60,7 @@ function mocha(opts) {
   return stream;
 }
 
-var mocha = customMocha();
+var mocha = mochaStream({concurrency: 3});
 
 gulp.task('test-custom-mocha', function() {
   gulp.src('**/*-specs.js', {read: false}) 
