@@ -76,7 +76,7 @@ gulp.task('test-custom-mocha', function() {
 - env mocha running env, (default: process.env)
 - flags: mocha flags (default: none)
 
-## TODO
+## Todo
 
 - option to prevent buffering of output (for dev)
 - concatenate mocha status at the end
