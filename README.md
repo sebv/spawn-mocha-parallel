@@ -21,7 +21,7 @@ then.
 Using built in mochaStream:
 
 ```js
-var mochaStream = require('./lib').mochaStream;
+var mochaStream = require('spawn-mocha-parallel').mochaStream;
 
 var mocha = mochaStream({concurrency: 10});
 
@@ -36,7 +36,7 @@ gulp.task('test-mocha', function() {
 Using SpawnMocha
 
 ```js
-var SpawnMocha = require('./lib').SpawnMocha,
+var SpawnMocha = require('spawn-mocha-parallel').SpawnMocha,
     _ = require('lodash');
     through = require('through');
 
