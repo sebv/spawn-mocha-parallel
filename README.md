@@ -6,6 +6,11 @@ This let you run your test in parallel by spawning several child processes.
 It was designed to be used with [gulp][gulp], but since it relies only
 on npm, it may be used within various configuration.
 
+[![NPM version](http://img.shields.io/npm/v/spawn-mocha-parallel.svg)](https://npmjs.org/package/spawn-mocha-parallel) 
+[![Downloads](http://img.shields.io/npm/dm/spawn-mocha-parallel.svg)](https://npmjs.org/package/spawn-mocha-parallel)
+[![Dependency Status](https://david-dm.org/sebv/spawn-mocha-parallel.svg)](https://david-dm.org/sebv/spawn-mocha-parallel)
+[![devDependency Status](https://david-dm.org/sebv/spawn-mocha-parallel/dev-status.svg)](https://david-dm.org/sebv/spawn-mocha-parallel#info=devDependencies)
+
 ## Credits
 
 This was originaly a fork of [gulp-spawn-mocha] but has deviated a lot since
