@@ -70,6 +70,16 @@ gulp.task('test-custom-mocha', function() {
 
 ```
 
+## Options
+
+- concurrency: # of mocha instance running in parallel (default: 1)
+- env mocha running env, (default: process.env)
+- flags: mocha flags (default: none)
+
+## TODO
+
+- option to prevent buffering of output (for dev)
+- concatenate mocha status at the end
 
 ## License
 
