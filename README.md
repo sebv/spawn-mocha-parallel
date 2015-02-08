@@ -1,7 +1,5 @@
 # spawn-mocha-parallel
 
-beta - work in progress
-
 This let you run your test in parallel by spawning several child processes.
 It was designed to be used with [gulp][gulp], but since it relies only
 on npm, it may be used within various configuration.
@@ -80,6 +78,7 @@ gulp.task('test-custom-mocha', function() {
 - concurrency: # of mocha instance running in parallel (default: 1)
 - env mocha running env, (default: process.env)
 - flags: mocha flags (default: none)
+- dots: print dots on output (default: false)
 
 ## Todo
 
