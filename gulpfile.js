@@ -82,7 +82,29 @@ gulp.task('test-live-output', function() {
     .pipe(mocha);
 });
 
+gulp.task('test-live-output-with-prepend', function() {
+  var mocha = mochaStream({
+    liveOutput: true,
+    liveOutputPrepend: 'client --> ',
+    concurrency: 1,
+    flags: { R: "tap" }
+  });
+  var srcFiles = [];
+  srcFiles.push(new File({
+    cwd: "/",
+    base: "test/",
+    path: "test/a-test-specs.js",
+  }));
+  return from(srcFiles)
+    .pipe(mocha);
+});
+
 
 gulp.task('test', function() {
-  return runSequence('test-mocha', 'test-custom-mocha', 'test-live-output');
+  return runSequence(
+    'test-mocha',
+    'test-custom-mocha',
+    'test-live-output',
+    'test-live-output-with-prepend'
+  );
 });

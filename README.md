@@ -54,7 +54,7 @@ function mochaStream(opts) {
       console.error('ERROR SUMMARY: ');
       _(errors).each(function(err) {
         console.error(err);
-        console.error(err.stack);        
+        console.error(err.stack);
       });
       stream.emit('error', "Some tests failed.");
     }
@@ -78,7 +78,6 @@ gulp.task('test-custom-mocha', function() {
 - concurrency: # of mocha instance running in parallel (default: 1)
 - env mocha running env, (default: process.env)
 - flags: mocha flags (default: none)
-- dots: print dots on output (default: false)
 - liveOutput: print output direct to console
 
 ## Todo
