@@ -82,6 +82,36 @@ gulp.task('test-live-output', function() {
     .pipe(mocha);
 });
 
+gulp.task('test-live-output-with-file', function() {
+  var mocha = mochaStream({
+    liveOutput: true,
+    fileOutput: '/tmp/out.log',
+    concurrency: 1
+  });
+  var srcFiles = [];
+  srcFiles.push(new File({
+    cwd: "/",
+    base: "test/",
+    path: "test/a-test-specs.js",
+  }));
+  return from(srcFiles).pipe(mocha);
+});
+
+gulp.task('test-with-file', function() {
+  var mocha = mochaStream({
+    fileOutput: '/tmp/out.log',
+    concurrency: 1
+  });
+  var srcFiles = [];
+  srcFiles.push(new File({
+    cwd: "/",
+    base: "test/",
+    path: "test/a-test-specs.js",
+  }));
+  return from(srcFiles).pipe(mocha);
+});
+
+
 gulp.task('test-live-output-with-prepend', function() {
   var mocha = mochaStream({
     liveOutput: true,
@@ -105,6 +135,8 @@ gulp.task('test', function() {
     'test-mocha',
     'test-custom-mocha',
     'test-live-output',
-    'test-live-output-with-prepend'
+    'test-live-output-with-prepend',
+    'test-live-output-with-file',
+    'test-with-file'
   );
 });
