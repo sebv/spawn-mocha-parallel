@@ -79,7 +79,7 @@ gulp.task('test-custom-mocha', function() {
 - env mocha running env, (default: process.env)
 - flags: mocha flags (default: none)
 - liveOutput: print output direct to console
-
+- errorSummary: show error summary (default: true)
 ## Todo
 
 - concatenate mocha status at the end
