@@ -24,7 +24,7 @@ var mochaStream = require('spawn-mocha-parallel').mochaStream;
 var mocha = mochaStream({concurrency: 10});
 
 gulp.task('test-mocha', function() {
-  gulp.src('**/*-specs.js', {read: false}) 
+  return gulp.src('**/*-specs.js', {read: false}) 
     .pipe(mocha)
     .on('error', console.error)
 });
@@ -66,7 +66,7 @@ function mochaStream(opts) {
 var mocha = mochaStream({concurrency: 3});
 
 gulp.task('test-custom-mocha', function() {
-  gulp.src('**/*-specs.js', {read: false}) 
+  return gulp.src('**/*-specs.js', {read: false}) 
     .pipe(mocha)
     .on('error', console.error)
 });
