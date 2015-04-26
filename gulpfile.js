@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'),
   mochaStream = require('./lib').mochaStream,
-  mochaOptsStream = require('./lib').mochaOptsStream,
   SpawnMocha = require('./lib').SpawnMocha,
   _ = require('lodash'),
   through = require('through'),
@@ -10,6 +9,7 @@ var gulp = require('gulp'),
   runSequence = Q.denodeify(require('run-sequence')),
   assert = require('assert'),
   File = require('vinyl'),
+  path = require('path'),
   from = require('from');
 
 function customMocha(opts) {
@@ -86,12 +86,6 @@ gulp.task('test-live-output', function () {
     .pipe(mocha);
 });
 
-gulp.task('test-mocha-opts-parallel', function () {
-  var mocha = mochaOptsStream({liveOutput: true, concurrency: 1});
-  gulp.src('test/*-specs.js')
-    .pipe(mocha);
-});
-
 gulp.task('test-live-output-with-file', function () {
   var mocha = mochaStream({
     liveOutput: true,
@@ -139,6 +133,32 @@ gulp.task('test-live-output-with-prepend', function () {
     .pipe(mocha);
 });
 
+gulp.task('test-mocha-opts-parallel', function () {
+  function setEnv(envs) {
+    var env = process.env;
+    env = _.clone(env);
+    env = _.merge(env, envs, {JUNIT_REPORT_PATH: path.resolve(__dirname, 'test/report/report.xml')});
+    return env;
+  }
+
+  var opts = {
+    concurrency: 3,
+    flags: {R: 'mocha-jenkins-reporter'},
+    iterations: [{
+      env: setEnv({NODE_ENV: 'groupa'}),
+      flags: {grep: "@groupA@"}
+    }, {
+      env: setEnv({NODE_ENV: 'groupb'}),
+      flags: {grep: "@groupB@"}
+    }, {
+      env: setEnv({NODE_ENV: 'groupc'}),
+      flags: {grep: "@groupC@"}
+    }]
+  };
+  var mocha = mochaStream(opts);
+  gulp.src('test/group/*-specs.js')
+    .pipe(mocha);
+});
 
 gulp.task('test', function () {
   return runSequence(
@@ -147,6 +167,7 @@ gulp.task('test', function () {
     'test-live-output',
     'test-live-output-with-prepend',
     'test-live-output-with-file',
-    'test-with-file'
+    'test-with-file',
+    'test-mocha-opts-parallel'
   );
 });

@@ -27,3 +27,7 @@ node_modules
 
 # Webstorm IDE metadata directory
 .idea
+
+# test report files
+test/report/*.xml*
+test/report/*.log
