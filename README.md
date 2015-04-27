@@ -52,6 +52,7 @@ gulp.task('test-mocha-iteration', function (cb) {
       flags: {grep: "@groupC@"}
     }]
   };
+  process.env.JUNIT_REPORT_PATH = path.resolve(__dirname, 'test/report/report.xml');
   glob('test/group/*-specs.js', function (err, files) {
     if (err) {
       return cb(err);
