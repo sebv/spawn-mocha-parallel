@@ -31,36 +31,6 @@ gulp.task('test-mocha', function() {
 
 ```
 
-### Using built in mochaIteration:
-
-mochaIteration allows you to spawn parallel processes which all run over the same fileset, but differ by whatever
-options are added (or overridden) in each iterations Array element.
-
-```js
-var mochaIteration = require('spawn-mocha-parallel').mochaIteration;
-var glob = require('glob');
-
-gulp.task('test-mocha-iteration', function (cb) {
-  var opts = {
-    concurrency: 3,
-    flags: {R: 'mocha-jenkins-reporter'},
-    iterations: [{
-      flags: {grep: "@groupA@"}
-    }, {
-      flags: {grep: "@groupB@"}
-    }, {
-      flags: {grep: "@groupC@"}
-    }]
-  };
-  process.env.JUNIT_REPORT_PATH = path.resolve(__dirname, 'test/report/report.xml');
-  glob('test/group/*-specs.js', function (err, files) {
-    if (err) {
-      return cb(err);
-    }
-    mochaIteration(opts, files, cb);
-  });
-});
-```
 
 ### Using SpawnMocha
 
@@ -111,7 +81,6 @@ gulp.task('test-custom-mocha', function() {
 - flags: mocha flags (default: none)
 - liveOutput: print output direct to console
 - errorSummary: show error summary (default: true)
-- iterations: Array, see below
 
 
 ## Todo

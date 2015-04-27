@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'),
   mochaStream = require('./lib').mochaStream,
-  mochaIteration = require('./lib').mochaIteration,
   SpawnMocha = require('./lib').SpawnMocha,
   _ = require('lodash'),
   through = require('through'),
@@ -136,7 +135,28 @@ gulp.task('test-live-output-with-prepend', function () {
 });
 
 gulp.task('test-mocha-opts-parallel', function (cb) {
-
+  function mochaIteration(opts, overrides, files, cb) {
+    opts = opts || {};
+    var spawnMocha = new SpawnMocha(opts);
+    overrides.forEach(function (override) {
+      spawnMocha.add(files, override);
+    });
+    var errors = [];
+    spawnMocha.on('error', function (err) {
+      console.error(err.toString());
+      errors.push(err);
+    }).on('end', function () {
+      if (errors.length > 0) {
+        console.error('ERROR SUMMARY: ');
+        _(errors).each(function (err) {
+          console.error(err);
+          console.error(err.stack);
+        }).value();
+        return cb(new Error('some tests failed'));
+      }
+      cb(null);
+    });
+  }
 
   function setEnv(envs) {
     var env = process.env;
@@ -147,24 +167,25 @@ gulp.task('test-mocha-opts-parallel', function (cb) {
 
   var opts = {
     concurrency: 3,
-    flags: {R: 'mocha-jenkins-reporter'},
-    iterations: [{
-      env: setEnv({NODE_ENV: 'groupa'}),
-      flags: {grep: "@groupA@"}
-    }, {
-      env: setEnv({NODE_ENV: 'groupb'}),
-      flags: {grep: "@groupB@"}
-    }, {
-      env: setEnv({NODE_ENV: 'groupc'}),
-      flags: {grep: "@groupC@"}
-    }]
+    flags: {R: 'mocha-jenkins-reporter'}
   };
+  var overrides = [{
+    env: setEnv({NODE_ENV: 'groupa'}),
+    flags: {grep: "@groupA@"}
+  }, {
+    env: setEnv({NODE_ENV: 'groupb'}),
+    flags: {grep: "@groupB@"}
+  }, {
+    env: setEnv({NODE_ENV: 'groupc'}),
+    flags: {grep: "@groupC@"}
+  }];
+
   glob('test/group/*-specs.js', function (err, files) {
     if (err) {
       return cb(err);
     }
     console.log('files', files);
-    mochaIteration(opts, files, cb);
+    mochaIteration(opts, overrides, files, cb);
   });
 });
 
