@@ -16,7 +16,7 @@ then.
 
 ## Usage
 
-### Using built in mochaStream:
+Using built in mochaStream:
 
 ```js
 var mochaStream = require('spawn-mocha-parallel').mochaStream;
@@ -31,8 +31,7 @@ gulp.task('test-mocha', function() {
 
 ```
 
-
-### Using SpawnMocha
+Using SpawnMocha
 
 ```js
 var SpawnMocha = require('spawn-mocha-parallel').SpawnMocha,
@@ -81,8 +80,6 @@ gulp.task('test-custom-mocha', function() {
 - flags: mocha flags (default: none)
 - liveOutput: print output direct to console
 - errorSummary: show error summary (default: true)
-
-
 ## Todo
 
 - concatenate mocha status at the end
