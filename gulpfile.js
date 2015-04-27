@@ -2,6 +2,7 @@
 
 var gulp = require('gulp'),
   mochaStream = require('./lib').mochaStream,
+  mochaIteration = require('./lib').mochaIteration,
   SpawnMocha = require('./lib').SpawnMocha,
   _ = require('lodash'),
   through = require('through'),
@@ -10,7 +11,8 @@ var gulp = require('gulp'),
   assert = require('assert'),
   File = require('vinyl'),
   path = require('path'),
-  from = require('from');
+  from = require('from'),
+  glob = require('glob');
 
 function customMocha(opts) {
   opts = opts || {};
@@ -133,7 +135,9 @@ gulp.task('test-live-output-with-prepend', function () {
     .pipe(mocha);
 });
 
-gulp.task('test-mocha-opts-parallel', function () {
+gulp.task('test-mocha-opts-parallel', function (cb) {
+
+
   function setEnv(envs) {
     var env = process.env;
     env = _.clone(env);
@@ -155,9 +159,13 @@ gulp.task('test-mocha-opts-parallel', function () {
       flags: {grep: "@groupC@"}
     }]
   };
-  var mocha = mochaStream(opts);
-  gulp.src('test/group/*-specs.js')
-    .pipe(mocha);
+  glob('test/group/*-specs.js', function (err, files) {
+    if (err) {
+      return cb(err);
+    }
+    console.log('files', files);
+    mochaIteration(opts, files, cb);
+  });
 });
 
 gulp.task('test', function () {

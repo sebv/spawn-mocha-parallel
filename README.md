@@ -16,7 +16,7 @@ then.
 
 ## Usage
 
-Using built in mochaStream:
+### Using built in mochaStream:
 
 ```js
 var mochaStream = require('spawn-mocha-parallel').mochaStream;
@@ -31,7 +31,37 @@ gulp.task('test-mocha', function() {
 
 ```
 
-Using SpawnMocha
+### Using built in mochaIteration:
+
+mochaIteration allows you to spawn parallel processes which all run over the same fileset, but differ by whatever
+options are added (or overridden) in each iterations Array element.
+
+```js
+var mochaIteration = require('spawn-mocha-parallel').mochaIteration;
+var glob = require('glob');
+
+gulp.task('test-mocha-iteration', function (cb) {
+  var opts = {
+    concurrency: 3,
+    flags: {R: 'mocha-jenkins-reporter'},
+    iterations: [{
+      flags: {grep: "@groupA@"}
+    }, {
+      flags: {grep: "@groupB@"}
+    }, {
+      flags: {grep: "@groupC@"}
+    }]
+  };
+  glob('test/group/*-specs.js', function (err, files) {
+    if (err) {
+      return cb(err);
+    }
+    mochaIteration(opts, files, cb);
+  });
+});
+```
+
+### Using SpawnMocha
 
 ```js
 var SpawnMocha = require('spawn-mocha-parallel').SpawnMocha,
@@ -82,50 +112,6 @@ gulp.task('test-custom-mocha', function() {
 - errorSummary: show error summary (default: true)
 - iterations: Array, see below
 
-### Iterations
-
-If you want to run parallel processes based on criteria other than files, use an iterations array.
-
-The iterations array should contain whatever "Options" (see above) you wish to override for a given iteration.
-
-The easiest to envision example would be:
-* your test suite names are annotated as: @groupA@, @groupB@, @groupC@, and so on
-* these groupings are spread across files, where a file may contain one or more suite of a given group
-* you want to spawn a mocha process for each grouping
-
-To achieve, you would specify an iterations array where each entry uses a different mocha grep. E.g. the task
-example "test-mocha-opts-parallel" in this project's `gulpfile.js`.
-
-```javascript
-gulp.task('test-mocha-opts-parallel', function () {
-    function setEnv(envs) {
-        var env = process.env;
-        env = _.clone(env);
-        env = _.merge(env, envs, {JUNIT_REPORT_PATH: path.resolve(__dirname, 'test/report/report.xml')});
-        return env;
-    }
-    var opts = {
-        concurrency: 3,
-        flags: {R: 'mocha-jenkins-reporter'},
-        iterations: [{
-            env: setEnv({NODE_ENV: 'groupa'}),
-            flags: {grep: "@groupA@"}
-        }, {
-            env: setEnv({NODE_ENV: 'groupb'}),
-            flags: {grep: "@groupB@"}
-        }, {
-            env: setEnv({NODE_ENV: 'groupc'}),
-            flags: {grep: "@groupC@"}
-        }]
-    };
-    var mocha = mochaStream(opts);
-    gulp.src('test/group/*-specs.js')
-        .pipe(mocha);
-});
-```
-
-Another use case might be if you are driving browser/device automation, and you want to run the same set of files
-in parallel on several browser/device combinations.
 
 ## Todo
 
