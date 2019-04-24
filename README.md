@@ -89,4 +89,4 @@ gulp.task('test-custom-mocha', function() {
 MIT
 
   [gulp]: http://gulpjs.com/ "gulp.js"
-  [mocha]: http://visionmedia.github.io/mocha/ "Mocha"
+  [mocha]: http://mochajs.org/ "Mocha"
