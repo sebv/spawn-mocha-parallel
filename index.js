@@ -1,6 +1,5 @@
 "use strict";
 
-// Module Requirements
 var _ = require('lodash'),
     proc = require('child_process'),
     join = require('path').join,
@@ -13,6 +12,7 @@ var _ = require('lodash'),
     fs = require('fs');
 
 require('colors');
+
 
 function newStreamBuffer() {
   var stream = new streamBuffers.WritableStreamBuffer({
@@ -31,19 +31,19 @@ var SpawnMocha = function (opts) {
   var queue = async.queue(function (task, done) {
     // Setup
     var bin = _.isFunction(opts.bin) ? opts.bin() : opts.bin ||
-      join(__dirname, '..', 'node_modules', '.bin', 'mocha');
+      join(__dirname, 'node_modules', '.bin', 'mocha');
     var env = _.isFunction(opts.env) ? opts.env() : opts.env || process.env;
     env = _.clone(env);
 
     // Generate arguments
     var args = [];
-    _(opts.flags).each(function (val, key) {
-      if(_.isFunction(val)) val = val();
+    _.each(opts.flags, function (val, key) {
+      if (_.isFunction(val)) val = val();
       args.push((key.length > 1 ? '--' : '-') + key);
       if (_.isString(val) || _.isNumber(val)) {
         args.push(val);
       }
-    }).value();
+    });
 
     var stdout = newStreamBuffer();
     var stderr = newStreamBuffer();
