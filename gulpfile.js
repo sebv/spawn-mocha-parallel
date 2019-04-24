@@ -1,15 +1,17 @@
 "use strict";
 
 var gulp = require('gulp'),
-    mochaStream = require('./lib').mochaStream,
-    SpawnMocha = require('./lib').SpawnMocha,
-    _ = require('lodash'),
-    through = require('through'),
-    Q = require('q'),
-    runSequence = Q.denodeify(require('run-sequence')),
-    assert = require('assert'),
-    File = require('vinyl'),
-    from = require('from');
+  mochaStream = require('./lib').mochaStream,
+  SpawnMocha = require('./lib').SpawnMocha,
+  _ = require('lodash'),
+  through = require('through'),
+  Q = require('q'),
+  runSequence = Q.denodeify(require('run-sequence')),
+  assert = require('assert'),
+  File = require('vinyl'),
+  from = require('from'),
+  path = require('path'),
+  glob = require('glob');
 
 function customMocha(opts) {
   opts = opts || {};
@@ -129,6 +131,60 @@ gulp.task('test-live-output-with-prepend', function() {
     .pipe(mocha);
 });
 
+gulp.task('test-mocha-opts-override', function (cb) {
+  function mochaIteration(opts, overrides, files, cb) {
+    opts = opts || {};
+    var spawnMocha = new SpawnMocha(opts);
+    overrides.forEach(function (override) {
+      spawnMocha.add(files, override);
+    });
+    var errors = [];
+    spawnMocha.on('error', function (err) {
+      console.error(err.toString());
+      errors.push(err);
+    }).on('end', function () {
+      if (errors.length > 0) {
+        console.error('ERROR SUMMARY: ');
+        _(errors).each(function (err) {
+          console.error(err);
+          console.error(err.stack);
+        }).value();
+        return cb(new Error('some tests failed'));
+      }
+      cb(null);
+    });
+  }
+
+  function setEnv(envs) {
+    var env = process.env;
+    env = _.clone(env);
+    env = _.merge(env, envs, {JUNIT_REPORT_PATH: path.resolve(__dirname, 'test/report/report.xml')});
+    return env;
+  }
+
+  var opts = {
+    concurrency: 3,
+    flags: {R: 'mocha-jenkins-reporter'}
+  };
+  var overrides = [{
+    env: setEnv({NODE_ENV: 'groupa'}),
+    flags: {grep: "@groupA@"}
+  }, {
+    env: setEnv({NODE_ENV: 'groupb'}),
+    flags: {grep: "@groupB@"}
+  }, {
+    env: setEnv({NODE_ENV: 'groupc'}),
+    flags: {grep: "@groupC@"}
+  }];
+
+  glob('test/group/*-specs.js', function (err, files) {
+    if (err) {
+      return cb(err);
+    }
+    console.log('files', files);
+    mochaIteration(opts, overrides, files, cb);
+  });
+});
 
 gulp.task('test', function() {
   return runSequence(
@@ -137,6 +193,7 @@ gulp.task('test', function() {
     'test-live-output',
     'test-live-output-with-prepend',
     'test-live-output-with-file',
-    'test-with-file'
+    'test-with-file',
+    'test-mocha-opts-override'
   );
 });
