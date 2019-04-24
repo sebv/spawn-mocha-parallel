@@ -4,19 +4,19 @@ This let you run your test in parallel by spawning several child processes.
 It was designed to be used with [gulp][gulp], but since it relies only
 on npm, it may be used within various configuration.
 
-[![NPM version](http://img.shields.io/npm/v/spawn-mocha-parallel.svg)](https://npmjs.org/package/spawn-mocha-parallel) 
+[![NPM version](http://img.shields.io/npm/v/spawn-mocha-parallel.svg)](https://npmjs.org/package/spawn-mocha-parallel)
 [![Downloads](http://img.shields.io/npm/dm/spawn-mocha-parallel.svg)](https://npmjs.org/package/spawn-mocha-parallel)
 [![Dependency Status](https://david-dm.org/sebv/spawn-mocha-parallel.svg)](https://david-dm.org/sebv/spawn-mocha-parallel)
 [![devDependency Status](https://david-dm.org/sebv/spawn-mocha-parallel/dev-status.svg)](https://david-dm.org/sebv/spawn-mocha-parallel#info=devDependencies)
 
 ## Credits
 
-This was originaly a fork of [gulp-spawn-mocha] but has deviated a lot since
+This was originaly a fork of [gulp-spawn-mocha](https://www.npmjs.com/package/gulp-spawn-mocha) but has deviated a lot since
 then.
 
 ## Usage
 
-Using built in mochaStream:
+Using built in `mochaStream`:
 
 ```js
 var mochaStream = require('spawn-mocha-parallel').mochaStream;
@@ -24,14 +24,14 @@ var mochaStream = require('spawn-mocha-parallel').mochaStream;
 var mocha = mochaStream({concurrency: 10});
 
 gulp.task('test-mocha', function() {
-  return gulp.src('**/*-specs.js', {read: false}) 
+  return gulp.src('**/*-specs.js', {read: false})
     .pipe(mocha)
     .on('error', console.error)
 });
 
 ```
 
-Using SpawnMocha
+Using `SpawnMocha`:
 
 ```js
 var SpawnMocha = require('spawn-mocha-parallel').SpawnMocha,
@@ -66,7 +66,7 @@ function mochaStream(opts) {
 var mocha = mochaStream({concurrency: 3});
 
 gulp.task('test-custom-mocha', function() {
-  return gulp.src('**/*-specs.js', {read: false}) 
+  return gulp.src('**/*-specs.js', {read: false})
     .pipe(mocha)
     .on('error', console.error)
 });
@@ -75,11 +75,12 @@ gulp.task('test-custom-mocha', function() {
 
 ## Options
 
-- concurrency: # of mocha instance running in parallel (default: 1)
-- env mocha running env, (default: process.env)
-- flags: mocha flags (default: none)
-- liveOutput: print output direct to console
-- errorSummary: show error summary (default: true)
+- `concurrency`: # of mocha instance running in parallel (default: `1`)
+- `env`: mocha running env, (default: `process.env`)
+- `flags`: mocha flags (default: none)
+- `liveOutput`: print output direct to console
+- `errorSummary`: show error summary (default: `true`)
+
 ## Todo
 
 - concatenate mocha status at the end
