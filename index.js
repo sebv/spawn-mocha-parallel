@@ -9,7 +9,8 @@ var _ = require('lodash'),
     streamBuffers = require("stream-buffers"),
     through = require('through'),
     split = require('split'),
-    fs = require('fs');
+    fs = require('fs'),
+    os = require('os');
 
 require('colors');
 
@@ -22,6 +23,11 @@ function newStreamBuffer() {
   return stream;
 }
 
+var getNpmBin = _.memoize(function getNpmBin () {
+  // this only happens once, so sync is fine
+  return proc.execSync('npm bin', {encoding: 'utf8'}).trim();
+});
+
 var SpawnMocha = function (opts) {
   var _this = this;
   opts = opts || {};
@@ -30,8 +36,10 @@ var SpawnMocha = function (opts) {
   });
   var queue = async.queue(function (task, done) {
     // Setup
-    var bin = _.isFunction(opts.bin) ? opts.bin() : opts.bin ||
-      join(__dirname, 'node_modules', '.bin', 'mocha');
+    var bin = _.isFunction(opts.bin)
+      ? opts.bin()
+      : opts.bin
+      || join(getNpmBin(), os.platform === 'win32' ? 'mocha.md' : 'mocha');
     var env = _.isFunction(opts.env) ? opts.env() : opts.env || process.env;
     env = _.clone(env);
 
