@@ -43,6 +43,9 @@
     "husky": "^2.0.0",
     "vinyl": "^2.0.0"
   },
+  "peerDependency": {
+    "mocha": "^6.0.0"
+  },
   "engines": {
     "node": ">= 0.9.0"
   },
