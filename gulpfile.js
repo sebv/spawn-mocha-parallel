@@ -1,15 +1,14 @@
 "use strict";
 
 var gulp = require('gulp'),
-    mochaStream = require('./lib').mochaStream,
-    SpawnMocha = require('./lib').SpawnMocha,
+    mochaStream = require('.').mochaStream,
+    SpawnMocha = require('.').SpawnMocha,
     _ = require('lodash'),
     through = require('through'),
-    Q = require('q'),
-    runSequence = Q.denodeify(require('run-sequence')),
     assert = require('assert'),
     File = require('vinyl'),
     from = require('from');
+
 
 function customMocha(opts) {
   opts = opts || {};
@@ -40,19 +39,19 @@ gulp.task('test-mocha', function() {
   var StdOutFixture = require('fixture-stdout');
   var fixture = new StdOutFixture();
   var output = '';
-  fixture.capture( function onWrite (string ) {
+  fixture.capture(function onWrite (string ) {
     output += string;
     return false;
   });
   var mocha = mochaStream({concurrency: 10});
   var srcFiles = [];
-  _(10).times(function() {
+  _.times(10, function () {
     srcFiles.push(new File({
       cwd: "/",
       base: "test/",
       path: "test/a-test-specs.js",
     }));
-  }).value();
+  });
   return from(srcFiles)
     .pipe(mocha)
     .on('error', console.error)
@@ -60,7 +59,7 @@ gulp.task('test-mocha', function() {
       fixture.release();
       // we should have run 10 tests in parallel in less than 10 sec
       assert(output.match(/1 passing/g).length === 10);
-      assert( Date.now() - startMS < 5000);
+      assert(Date.now() - startMS < 8000);
     });
 });
 
@@ -130,13 +129,11 @@ gulp.task('test-live-output-with-prepend', function() {
 });
 
 
-gulp.task('test', function() {
-  return runSequence(
-    'test-mocha',
-    'test-custom-mocha',
-    'test-live-output',
-    'test-live-output-with-prepend',
-    'test-live-output-with-file',
-    'test-with-file'
-  );
-});
+gulp.task('test', gulp.series(
+  'test-mocha',
+  'test-custom-mocha',
+  'test-live-output',
+  'test-live-output-with-prepend',
+  'test-live-output-with-file',
+  'test-with-file'
+));
